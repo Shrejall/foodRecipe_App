@@ -22,7 +22,6 @@ app.use("/",require("./routes/user"))
 app.use("/recipe",require("./routes/recipe"))
 
 // Serve frontend in production (Catch-all route)
-const path = require('path');
 if (process.env.NODE_ENV === 'production') {
   app.get(/(.*)/, (req, res) => {
     res.sendFile(path.resolve(__dirname,'..', 'frontend', 'food-blog-app', 'dist', 'index.html'));
