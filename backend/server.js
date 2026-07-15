@@ -18,7 +18,8 @@ connectDb() // this func runs immediately and backend is connected to MongoDB
 // these functions are executed only when req arrives
 app.use(express.json())
 app.use(cors())
-app.use(express.static("frontend/food-blog-app/dist"))
+// Add ".." here too
+app.use(express.static(path.resolve(__dirname, '..', 'frontend', 'food-blog-app', 'dist')));
 
 app.use("/",require("./routes/user"))
 app.use("/recipe",require("./routes/recipe"))
@@ -27,7 +28,7 @@ app.use("/recipe",require("./routes/recipe"))
 const path = require('path');
 if (process.env.NODE_ENV === 'production') {
   app.get(/(.*)/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'food-blog-app', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname,'..', 'frontend', 'food-blog-app', 'dist', 'index.html'));
   });
 }
 
