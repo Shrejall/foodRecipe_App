@@ -6,7 +6,7 @@
 "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "npm install --prefix frontend/food-blog-app --legacy-peer-deps && npm run build --prefix frontend/food-blog-app"
+    "build": "npm install && npm install --prefix ../frontend/food-blog-app && npm run build --prefix ../frontend/food-blog-app"
   },
   "keywords": [],
   "author": "",
