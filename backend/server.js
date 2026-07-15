@@ -1,11 +1,8 @@
-// import Express framework
-const express = require('express')
-// Create your server instance -> app
-const app = express()
-// .env file is imported
-const dotenv= require("dotenv").config()
-// imports your DB connection func
-const connectDb=require("./config/connectionDb")
+const express = require('express') // import Express framework
+const app = express() // Create your server instance -> app
+const dotenv= require("dotenv").config() // .env file is imported
+const path = require('path')
+const connectDb=require("./config/connectionDb")// imports your DB connection func
 const cors=require("cors")
 //CORS - cross origin resource sharing
 // allow frontend to talk to backend
