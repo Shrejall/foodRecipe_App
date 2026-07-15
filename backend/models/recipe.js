@@ -22,10 +22,11 @@ const recipeSchema=mongoose.Schema({
         required:false
     },
     createdBy:{
-        type:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId, // objectId is defined to track the user details under which this recipe data is stored
         ref:"User"
     }
 
 }, {timestamps:true})
 
-module.exports= mongoose.model("Recipe", recipeSchema);
+module.exports= mongoose.model("Recipe", recipeSchema); // create collection in DB and collection name is recipe.
+// this file define the structure of recipe data stored in database  

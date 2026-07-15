@@ -1,6 +1,8 @@
 const User = require("../models/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+// bcrpyt -> lib used for password hashing
+// jwt -> lib used for authentication token
 
 const userSignUp = async (req, res) => {
     const { email, password } = req.body
@@ -11,8 +13,8 @@ const userSignUp = async (req, res) => {
     if (user) {
         return res.status(400).json({ error: "Email is already exist" })
     }
-    const hashPwd = await bcrypt.hash(password, 10)
-    const newUser = await User.create({
+    const hashPwd = await bcrypt.hash(password, 10) // convert password in secured form
+    const newUser = await User.create({ // new user is created
         email, password: hashPwd
     })
     let token = jwt.sign({ email, id: newUser._id }, process.env.SECRET_KEY)

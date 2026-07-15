@@ -1,28 +1,33 @@
 const Recipes=require("../models/recipe")
-const multer  = require('multer')
+const multer  = require('multer') // middleware for file uploads
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './public/images')
+      cb(null, './public/images') // when user upload image,it get saved in public/images
     },
     filename: function (req, file, cb) {
       const filename = Date.now() + '-' + file.originalname
       cb(null, filename)
     }
   })
-  
-  const upload = multer({ storage: storage })
 
+const upload = multer({ storage: storage }) // middleware used in routes
+
+// The endpoint of API calling is defined in routes\ - recipes.js
+
+// Get all recipes
 const getRecipes=async(req,res)=>{
     const recipes=await Recipes.find()
     return res.json(recipes)
 }
 
+// Get a recipe using ID
 const getRecipe=async(req,res)=>{
     const recipe=await Recipes.findById(req.params.id)
     res.json(recipe)
 }
 
+// Add a new recipe
 const addRecipe=async(req,res)=>{
     console.log(req.user)
     const {title,ingredients,instructions,time}=req.body 
@@ -34,11 +39,13 @@ const addRecipe=async(req,res)=>{
 
     const newRecipe=await Recipes.create({
         title,ingredients,instructions,time,coverImage:req.file.filename,
-        createdBy:req.user.id
+        createdBy:req.user.id // only logged in user can create a recipe
     })
    return res.json(newRecipe)
 }
 
+// Edit a recipe
+// If new image given then add new one else keep the old one
 const editRecipe=async(req,res)=>{
     const {title,ingredients,instructions,time}=req.body 
     let recipe=await Recipes.findById(req.params.id)
@@ -52,9 +59,10 @@ const editRecipe=async(req,res)=>{
     }
     catch(err){
         return res.status(404).json({message:err})
-    }
-    
+    } 
 }
+
+// Delete a recipe
 const deleteRecipe=async(req,res)=>{
     try{
         await Recipes.deleteOne({_id:req.params.id})
@@ -66,3 +74,5 @@ const deleteRecipe=async(req,res)=>{
 }
 
 module.exports={getRecipes,getRecipe,addRecipe,editRecipe,deleteRecipe,upload}
+// exported so that these functions can be used in other files.
+// Make all functions usable in routes

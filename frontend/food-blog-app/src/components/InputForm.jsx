@@ -3,9 +3,9 @@ import axios from 'axios'
 
 export default function InputForm({setIsOpen}) {
     const [email,setEmail] = useState("")
-     const [password,setPassword]=useState("")
-     const [isSignUp, setIsSignUp] =useState(false)
-     const [error, setError] = useState("")
+    const [password,setPassword]=useState("")
+    const [isSignUp, setIsSignUp] =useState(false)
+    const [error, setError] = useState("")
 
     const handleOnSubmit= async (e)=>{
         e.preventDefault()

@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
-import Recipe_App from '../assets/recipe_app.jpg'
-import RecipeItems from '../components/RecipeItems'
-import {useNavigate} from 'react-router-dom'
+import Recipe_App from '../assets/recipe_app.jpg' // image for UI
+import RecipeItems from '../components/RecipeItems' // component that shows all recipes
+import {useNavigate} from 'react-router-dom' //used for navigation b/w pages
+import Modal from '../components/Modal' // popup component
+import InputForm from '../components/InputForm' // form inside model
+
 
 
 export default function Home() {
     const navigate=useNavigate()
+    // isOpen- model visible or not and setIsOpen - update it
     const [isOpen, setIsOpen] = useState(false)
     const addRecipe=()=>{
         let token=localStorage.getItem("token")
-        if(token) navigate("/addRecipe")
-            else{ setIsOpen(true) }
+        if(token) navigate("/addRecipe") // user logged in-> redirected to add recipe page
+            else{ setIsOpen(true) }  // open login modal
     }
   return (
     <>
@@ -18,7 +22,13 @@ export default function Home() {
     <section className ='home'>
         <div className='left'>
             <h1>Food Recipe</h1>
-            <h5>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</h5>
+            <h5>
+Welcome to our food community where taste meets creativity. 
+Explore a variety of recipes made for every mood and occasion. 
+Whether you love experimenting in the kitchen or sticking to 
+classic comfort meals, this is your space to discover, create, 
+and share amazing flavors.
+</h5>
             <button onClick={addRecipe}>Share your recipe</button>
         </div>
         <div className ='right'>

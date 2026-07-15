@@ -15,9 +15,7 @@ import axios from 'axios'
 // }
 
 const getAllRecipes = async () => {
-  // ✅ CORRECT relative URL. The proxy will handle it.
   const response = await axios.get('/recipe'); 
-  
   // This is a much cleaner way to write this function.
   // The 'response.data' will be returned to useLoaderData().
   return response.data; 

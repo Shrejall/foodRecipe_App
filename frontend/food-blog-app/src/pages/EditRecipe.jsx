@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function EditRecipe() {
+    // stores entire form data
     const [recipeData, setRecipeData] = useState({})
     const navigate = useNavigate()
-    const{id}=useParams()
+    const{id}=useParams() // get recipe Id from URL
 
+    // fetch the existing data
     useEffect(()=>{
         const getData=async()=>{
-            await axios.get(`http://localhost:5000/recipe/${id}`)
-            .then(response=>{
+            await axios.get(`http://localhost:5000/recipe/${id}`) // req sent
+            .then(response=>{ // res is stored
                 let res=response.data
                 setRecipeData({
                     title:res.title,
@@ -23,6 +25,9 @@ export default function EditRecipe() {
         getData()
     },[])
 
+    // update the logic (edit the recipe)
+    // Input handling
+    // copy old data and update only changed fields
     const onHandleChange = (e) => {
         let val = (e.target.name === "ingredients") ? e.target.value.split(",") : (e.target.name === "file") ? e.target.files[0] : e.target.value
         setRecipeData(pre => ({ ...pre, [e.target.name]: val }))
@@ -30,16 +35,16 @@ export default function EditRecipe() {
     const onHandleSubmit = async (e) => {
         e.preventDefault()
         console.log(recipeData)
-        await axios.put(`http://localhost:5000/recipe/${id}`, recipeData,{
+        await axios.put(`http://localhost:5000/recipe/${id}`, recipeData,{ // data send to backend
             headers:{
                 'Content-Type':'multipart/form-data',
                 'authorization':'bearer '+localStorage.getItem("token")
             }
         })
-            .then(() => navigate("/myRecipe"))
+            .then(() => navigate("/myRecipe")) // aftter success updation redirect user
     }
-    return (
-        <>
+    return ( // onChange update the state
+        <> 
             <div className='container'>
                 <form className='form' onSubmit={onHandleSubmit}>
                     <div className='form-control'>

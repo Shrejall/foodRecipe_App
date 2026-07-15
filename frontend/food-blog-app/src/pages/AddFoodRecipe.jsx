@@ -12,6 +12,7 @@ export default function AddFoodRecipe() {
     const onHandleSubmit = async (e) => {
         e.preventDefault()
         console.log(recipeData)
+        // POST /recipe
         await axios.post("http://localhost:5000/recipe", recipeData,{
             headers:{
                 'Content-Type':'multipart/form-data',
