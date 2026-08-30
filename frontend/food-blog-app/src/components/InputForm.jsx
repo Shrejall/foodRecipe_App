@@ -10,11 +10,14 @@ export default function InputForm({setIsOpen}) {
     const handleOnSubmit= async (e)=>{
         e.preventDefault()
         let endpoint=(isSignUp) ? "signUp" : "login"
-        await axios.post(`http://localhost:5000/${endpoint}`, {email,password})
+        // await axios.post(`http://localhost:5000/${endpoint}`, {email,password})
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+        await axios.post(`${backendUrl}/${endpoint}`, {email, password})
         .then((res)=>{
             localStorage.setItem("token", res.data.token)
             localStorage.setItem("user", JSON.stringify(res.data.user))
-            setIsOpen()
+            setIsOpen(false)
         })
         .catch(data=>setError(data.response?.data?.error))
     }

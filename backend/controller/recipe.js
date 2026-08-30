@@ -73,6 +73,16 @@ const deleteRecipe=async(req,res)=>{
     }
 }
 
-module.exports={getRecipes,getRecipe,addRecipe,editRecipe,deleteRecipe,upload}
+const getUserRecipes = async (req, res) => {
+    try {
+        // req.user.id is provided by the verifyToken middleware
+        const recipes = await Recipes.find({ createdBy: req.user.id });
+        return res.json(recipes);
+    } catch (err) {
+        return res.status(500).json({ message: "Error fetching user recipes" });
+    }
+}
+
+module.exports={getRecipes,getRecipe,addRecipe,editRecipe,deleteRecipe,upload, getUserRecipes}
 // exported so that these functions can be used in other files.
 // Make all functions usable in routes

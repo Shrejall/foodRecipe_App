@@ -41,7 +41,7 @@ export default function EditRecipe() {
                 'authorization':'bearer '+localStorage.getItem("token")
             }
         })
-            .then(() => navigate("/myRecipe")) // aftter success updation redirect user
+            .then(() => navigate("/myRecipe")) // after success updation redirect user
     }
     return ( // onChange update the state
         <> 

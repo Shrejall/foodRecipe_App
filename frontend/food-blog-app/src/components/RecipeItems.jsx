@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLoaderData, useNavigate } from 'react-router-dom'
+import { Link, useLoaderData, useNavigate, useLocation } from 'react-router-dom'
 // import foodImg from '../assets/foodRecipe.png'
 import { BsStopwatchFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa6";
@@ -10,7 +10,9 @@ import axios from 'axios';
 export default function RecipeItems() {
     const recipes = useLoaderData()
     const [allRecipes, setAllRecipes] = useState()
-    let path = window.location.pathname === "/myRecipe" ? true : false
+    const location = useLocation()
+    const path = location.pathname === "/myRecipe"
+    // let path = window.location.pathname === "/myRecipe" ? true : false
     let favItems = JSON.parse(localStorage.getItem("fav")) ?? []
     const [isFavRecipe, setIsFavRecipe] = useState(false)
     const navigate=useNavigate()
@@ -20,8 +22,11 @@ export default function RecipeItems() {
         setAllRecipes(recipes)
     }, [recipes])
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const onDelete = async (id) => {
-        await axios.delete(`http://localhost:5000/recipe/${id}`)
+        const token = localStorage.getItem("token");
+        // await axios.delete(`http://localhost:5000/recipe/${id}`)
+        await axios.delete(`${backendUrl}/recipe/${id}`)
             .then((res) => console.log(res))
         setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id))
         let filterItem = favItems.filter(recipe => recipe._id !== id)
@@ -42,7 +47,8 @@ export default function RecipeItems() {
                     allRecipes?.map((item, index) => {
                         return (
                             <div key={index} className='card'onDoubleClick={()=>navigate(`/recipe/${item._id}`)}>
-                                <img src={`http://localhost:5000/images/${item.coverImage}`} width="120px" height="100px"></img>
+                                {/* <img src={`http://localhost:5000/images/${item.coverImage}`} width="120px" height="100px"></img> */}
+                                <img src={`${backendUrl}/images/${item.coverImage}`} width="120px" height="100px" alt="recipe cover" />
                                 <div className='card-body'>
                                     <div className='title'>{item.title}</div>
                                     <div className='icons'>
