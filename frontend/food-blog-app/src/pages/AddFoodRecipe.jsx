@@ -122,8 +122,9 @@ export default function AddFoodRecipe() {
         }
 
         try {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
             // 2. Send the request with the multipart/form-data header
-            const response = await axios.post('http://localhost:5000/recipe', formData, {
+            const response = await axios.post(`${backendUrl}/recipe`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('token')}` 
