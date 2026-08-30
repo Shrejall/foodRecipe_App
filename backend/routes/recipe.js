@@ -19,7 +19,7 @@ const express = require("express")
 // Import controller functions
 const { getRecipes, getRecipe, addRecipe, editRecipe, deleteRecipe, upload, getUserRecipes } = require("../controller/recipe")
 // only logged-in users are allowed
-const verifyToken = require("../middleware/verifyToken");
+const verifyToken = require("../middleware/auth");
 const router = express.Router()
 
 router.get("/", getRecipes) // Get all recipes
