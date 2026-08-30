@@ -23,14 +23,21 @@ export default function RecipeItems() {
     }, [recipes])
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     const onDelete = async (id) => {
         const token = localStorage.getItem("token");
-        // await axios.delete(`http://localhost:5000/recipe/${id}`)
-        await axios.delete(`${backendUrl}/recipe/${id}`)
-            .then((res) => console.log(res))
-        setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id))
-        let filterItem = favItems.filter(recipe => recipe._id !== id)
-        localStorage.setItem("fav", JSON.stringify(filterItem))
+        try {
+            await axios.delete(`${backendUrl}/recipe/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id));
+            let filterItem = favItems.filter(recipe => recipe._id !== id);
+            localStorage.setItem("fav", JSON.stringify(filterItem));
+        } catch (err) {
+            console.error("Failed to delete recipe:", err);
+        }
     }
 
     const favRecipe = (item) => {
