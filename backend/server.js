@@ -15,6 +15,8 @@ connectDb() // this func runs immediately and backend is connected to MongoDB
 // these functions are executed only when req arrives
 app.use(express.json())
 app.use(cors())
+
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 // Add ".." here too
 // app.use(express.static(path.resolve(__dirname, '..', 'frontend', 'food-blog-app', 'dist')));
 
