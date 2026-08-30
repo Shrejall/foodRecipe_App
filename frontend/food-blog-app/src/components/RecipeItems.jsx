@@ -9,7 +9,7 @@ import axios from 'axios';
 
 export default function RecipeItems() {
     const recipes = useLoaderData()
-    const [allRecipes, setAllRecipes] = useState()
+    const [allRecipes, setAllRecipes] = useState([])
     const location = useLocation()
     const path = location.pathname === "/myRecipe"
     // let path = window.location.pathname === "/myRecipe" ? true : false
@@ -44,7 +44,8 @@ export default function RecipeItems() {
         <>
             <div className='card-container'>
                 {
-                    allRecipes?.map((item, index) => {
+                    // allRecipes?.map((item, index) => {
+                        Array.isArray(allRecipes) && allRecipes.map((item, index) => {
                         return (
                             <div key={index} className='card'onDoubleClick={()=>navigate(`/recipe/${item._id}`)}>
                                 {/* <img src={`http://localhost:5000/images/${item.coverImage}`} width="120px" height="100px"></img> */}
