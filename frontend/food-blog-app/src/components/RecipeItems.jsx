@@ -22,14 +22,13 @@ export default function RecipeItems() {
 
     const path = location.pathname === "/myRecipe";
 
-    const [isFavRecipe, setIsFavRecipe] = useState(false);
+    const [favItems, setFavItems] = useState(
+    JSON.parse(localStorage.getItem("fav")) ?? []
+    );
 
     const navigate = useNavigate();
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-    let favItems = JSON.parse(localStorage.getItem("fav")) ?? [];
-
 
     // Load recipes
     useEffect(() => {
@@ -62,13 +61,16 @@ export default function RecipeItems() {
 
             // Remove from favourites
             const filterItem = favItems.filter(
-                (recipe) => recipe._id !== id
+                (recipe) => String(recipe._id) !== String(id)
             );
+
+            setFavItems(filterItem);
 
             localStorage.setItem(
                 "fav",
                 JSON.stringify(filterItem)
             );
+            
 
         } catch (err) {
 
@@ -84,37 +86,35 @@ export default function RecipeItems() {
     // Add / remove favourite
     const favRecipe = (item) => {
 
-        const alreadyFavourite = favItems.some(
-            (recipe) => recipe._id === item._id
+    const alreadyFavourite = favItems.some(
+        (recipe) =>
+            String(recipe._id) === String(item._id)
+    );
+
+    let updatedFavItems;
+
+    if (alreadyFavourite) {
+
+        updatedFavItems = favItems.filter(
+            (recipe) =>
+                String(recipe._id) !== String(item._id)
         );
 
-        let updatedFavItems;
+    } else {
 
-        if (alreadyFavourite) {
+        updatedFavItems = [
+            ...favItems,
+            item
+        ];
+    }
 
-            updatedFavItems = favItems.filter(
-                (recipe) => recipe._id !== item._id
-            );
+    setFavItems(updatedFavItems);
 
-        } else {
-
-            updatedFavItems = [
-                ...favItems,
-                item
-            ];
-        }
-
-        favItems = updatedFavItems;
-
-        localStorage.setItem(
-            "fav",
-            JSON.stringify(updatedFavItems)
-        );
-
-        setIsFavRecipe(
-            (previous) => !previous
-        );
-    };
+    localStorage.setItem(
+        "fav",
+        JSON.stringify(updatedFavItems)
+    );
+};
 
 
     return (
@@ -194,10 +194,10 @@ export default function RecipeItems() {
                                         style={{
                                             color: favItems.some(
                                                 (recipe) =>
-                                                    recipe._id === item._id
+                                                    String(recipe._id) === String(item._id)
                                             )
                                                 ? "red"
-                                                : ""
+                                                : "black"
                                         }}
                                     />
 
