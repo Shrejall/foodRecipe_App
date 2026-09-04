@@ -1,80 +1,250 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useLoaderData, useNavigate, useLocation } from 'react-router-dom'
-// import foodImg from '../assets/foodRecipe.png'
+import React, { useEffect, useState } from "react";
+import {
+    Link,
+    useLoaderData,
+    useNavigate,
+    useLocation
+} from "react-router-dom";
+
 import { BsStopwatchFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import axios from 'axios';
+import { MdDelete, MdRestaurant } from "react-icons/md";
+import axios from "axios";
 
 export default function RecipeItems() {
-    const recipes = useLoaderData()
-    const [allRecipes, setAllRecipes] = useState([])
-    const location = useLocation()
-    const path = location.pathname === "/myRecipe"
-    // let path = window.location.pathname === "/myRecipe" ? true : false
-    let favItems = JSON.parse(localStorage.getItem("fav")) ?? []
-    const [isFavRecipe, setIsFavRecipe] = useState(false)
-    const navigate=useNavigate()
-    console.log(allRecipes)
 
-    useEffect(() => {
-        setAllRecipes(recipes)
-    }, [recipes])
+    const recipes = useLoaderData();
+
+    const [allRecipes, setAllRecipes] = useState([]);
+
+    const location = useLocation();
+
+    const path = location.pathname === "/myRecipe";
+
+    const [isFavRecipe, setIsFavRecipe] = useState(false);
+
+    const navigate = useNavigate();
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const onDelete = async (id) => {
-        const token = localStorage.getItem("token");
-        try {
-            await axios.delete(`${backendUrl}/recipe/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setAllRecipes(recipes => recipes.filter(recipe => recipe._id !== id));
-            let filterItem = favItems.filter(recipe => recipe._id !== id);
-            localStorage.setItem("fav", JSON.stringify(filterItem));
-        } catch (err) {
-            console.error("Failed to delete recipe:", err);
-        }
-    }
+    let favItems = JSON.parse(localStorage.getItem("fav")) ?? [];
 
+
+    // Load recipes
+    useEffect(() => {
+        setAllRecipes(recipes);
+    }, [recipes]);
+
+
+    // Delete recipe
+    const onDelete = async (id) => {
+
+        const token = localStorage.getItem("token");
+
+        try {
+
+            await axios.delete(
+                `${backendUrl}/recipe/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            // Remove recipe from UI
+            setAllRecipes((recipes) =>
+                recipes.filter(
+                    (recipe) => recipe._id !== id
+                )
+            );
+
+            // Remove from favourites
+            const filterItem = favItems.filter(
+                (recipe) => recipe._id !== id
+            );
+
+            localStorage.setItem(
+                "fav",
+                JSON.stringify(filterItem)
+            );
+
+        } catch (err) {
+
+            console.error(
+                "Failed to delete recipe:",
+                err
+            );
+
+        }
+    };
+
+
+    // Add / remove favourite
     const favRecipe = (item) => {
-        let filterItem = favItems.filter(recipe => recipe._id !== item._id)
-        favItems = favItems.filter(recipe => recipe._id === item._id).length === 0 ? [...favItems, item] : filterItem
-        localStorage.setItem("fav", JSON.stringify(favItems))
-        setIsFavRecipe(pre => !pre)
-    }
+
+        const alreadyFavourite = favItems.some(
+            (recipe) => recipe._id === item._id
+        );
+
+        let updatedFavItems;
+
+        if (alreadyFavourite) {
+
+            updatedFavItems = favItems.filter(
+                (recipe) => recipe._id !== item._id
+            );
+
+        } else {
+
+            updatedFavItems = [
+                ...favItems,
+                item
+            ];
+        }
+
+        favItems = updatedFavItems;
+
+        localStorage.setItem(
+            "fav",
+            JSON.stringify(updatedFavItems)
+        );
+
+        setIsFavRecipe(
+            (previous) => !previous
+        );
+    };
+
 
     return (
-        <>
-            <div className='card-container'>
-                {
-                    // allRecipes?.map((item, index) => {
-                        Array.isArray(allRecipes) && allRecipes.map((item, index) => {
-                        return (
-                            <div key={index} className='card'onDoubleClick={()=>navigate(`/recipe/${item._id}`)}>
-                                {/* <img src={`http://localhost:5000/images/${item.coverImage}`} width="120px" height="100px"></img> */}
-                                <img src={`${backendUrl}/images/${item.coverImage}`} width="120px" height="100px" alt="recipe cover" />
-                                <div className='card-body'>
-                                    <div className='title'>{item.title}</div>
-                                    <div className='icons'>
-                                        <div className='timer'><BsStopwatchFill />{item.time}</div>
-                                        {(!path) ? <FaHeart onClick={() => favRecipe(item)}
-                                            style={{ color: (favItems.some(res => res._id === item._id)) ? "red" : "" }} /> :
-                                            <div className='action'>
-                                                <Link to={`/editRecipe/${item._id}`} className="editIcon"><FaEdit /></Link>
-                                                <MdDelete onClick={() => onDelete(item._id)} className='deleteIcon' />
-                                            </div>
-                                        }
-                                    </div>
+        <div className="card-container">
+
+            {Array.isArray(allRecipes) &&
+                allRecipes.map((item) => (
+
+                    <div
+                        key={item._id}
+                        className="card"
+                        onDoubleClick={() =>
+                            navigate(`/recipe/${item._id}`)
+                        }
+                    >
+
+                        {/* =========================
+                            RECIPE IMAGE
+                        ========================= */}
+
+                        <div className="recipe-image">
+
+                            {item.coverImage ? (
+
+                                <img
+                                    src={`${backendUrl}/images/${item.coverImage}`}
+                                    alt={item.title}
+                                />
+
+                            ) : (
+
+                                <div className="recipe-placeholder">
+
+                                    <MdRestaurant className="placeholder-icon" />
+
+                                    <span>
+                                        AI Recipe
+                                    </span>
+
                                 </div>
+
+                            )}
+
+                        </div>
+
+
+                        {/* =========================
+                            RECIPE DETAILS
+                        ========================= */}
+
+                        <div className="card-body">
+
+                            <div className="title">
+                                {item.title}
                             </div>
-                        )
-                    })
-                }
-            </div>
-        </>
-    )
+
+
+                            <div className="icons">
+
+                                {/* Cooking time */}
+
+                                <div className="timer">
+                                    <BsStopwatchFill />
+                                    {item.time}
+                                </div>
+
+
+                                {/* Favourite / Edit / Delete */}
+
+                                {!path ? (
+
+                                    <FaHeart
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            favRecipe(item);
+                                        }}
+                                        style={{
+                                            color: favItems.some(
+                                                (recipe) =>
+                                                    recipe._id === item._id
+                                            )
+                                                ? "red"
+                                                : ""
+                                        }}
+                                    />
+
+                                ) : (
+
+                                    <div
+                                        className="action"
+                                        onDoubleClick={(e) =>
+                                            e.stopPropagation()
+                                        }
+                                    >
+
+                                        {/* Edit */}
+
+                                        <Link
+                                            to={`/editRecipe/${item._id}`}
+                                            className="editIcon"
+                                            onClick={(e) =>
+                                                e.stopPropagation()
+                                            }
+                                        >
+                                            <FaEdit />
+                                        </Link>
+
+
+                                        {/* Delete */}
+
+                                        <MdDelete
+                                            className="deleteIcon"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDelete(item._id);
+                                            }}
+                                        />
+
+                                    </div>
+
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                ))}
+
+        </div>
+    );
 }

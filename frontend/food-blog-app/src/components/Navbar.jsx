@@ -1,42 +1,109 @@
-import React, { useEffect, useState } from 'react'
-import Modal from './Modal'
-import InputForm from './InputForm'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import Modal from "./Modal";
+import InputForm from "./InputForm";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
-  const [isOpen,setIsOpen]=useState(false)
-  let token=localStorage.getItem("token")
-  const [isLogin,setIsLogin]=useState(token ? false : true)
-  let user=JSON.parse(localStorage.getItem("user"))
+    const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(()=>{
-    setIsLogin(token ? false : true)
-  },[token])
+    const [isLogin, setIsLogin] = useState(
+        localStorage.getItem("token") ? false : true
+    );
 
-  const checkLogin=()=>{
-    if(token){
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-      setIsLogin(true)
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLogin(token ? false : true);
+    }, []);
 
-    }
-    else{
-      setIsOpen(true)
-    }
-  }
+    const checkLogin = () => {
+        const token = localStorage.getItem("token");
 
-  return (
-    <>
-        <header>
-            <h2>Food Blog</h2>
-            <ul>
-                <li><NavLink to="/">Home</NavLink></li>
-                <li onClick={()=>isLogin && setIsOpen(true)}><NavLink to={ !isLogin ? "/myRecipe" : "/"}>My Recipe</NavLink></li>
-                <li onClick={()=>isLogin && setIsOpen(true)}><NavLink to={ !isLogin ? "/favRecipe" : "/"}>Favourites</NavLink></li>
-                <li onClick={checkLogin}><p className='login'>{isLogin ? "Login" : "Logout"}{user?.email ? `(${user?.email})`:""}</p></li>
-            </ul>
-        </header>
-       { (isOpen) && <Modal onClose={()=>setIsOpen(false)}><InputForm setIsOpen={()=>setIsOpen(false)}/></Modal>}
-    </>
-  )
+        if (token) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setIsLogin(true);
+        } else {
+            setIsOpen(true);
+        }
+    };
+
+    return (
+        <>
+            <header className="navbar">
+
+                <h2 className="navbar-logo">
+                    <NavLink to="/">
+                        Food Blog
+                    </NavLink>
+                </h2>
+
+                <nav className="navbar-links">
+
+                    <NavLink
+                        to="/"
+                        className={({ isActive }) =>
+                            isActive ? "nav-link active" : "nav-link"
+                        }
+                    >
+                        Home
+                    </NavLink>
+
+                    <NavLink
+                        to={isLogin ? "/" : "/myRecipe"}
+                        className={({ isActive }) =>
+                            isActive ? "nav-link active" : "nav-link"
+                        }
+                        onClick={(e) => {
+                            if (isLogin) {
+                                e.preventDefault();
+                                setIsOpen(true);
+                            }
+                        }}
+                    >
+                        My Recipe
+                    </NavLink>
+
+                    <NavLink
+                        to={isLogin ? "/" : "/favRecipe"}
+                        className={({ isActive }) =>
+                            isActive ? "nav-link active" : "nav-link"
+                        }
+                        onClick={(e) => {
+                            if (isLogin) {
+                                e.preventDefault();
+                                setIsOpen(true);
+                            }
+                        }}
+                    >
+                        Favourites
+                    </NavLink>
+
+                    <NavLink
+                        to="/ai-recipe"
+                        className={({ isActive }) =>
+                            isActive ? "nav-link active" : "nav-link"
+                        }
+                    >
+                        AI Recipe
+                    </NavLink>
+
+                </nav>
+
+                <button
+                    type="button"
+                    className="login-button"
+                    onClick={checkLogin}
+                >
+                    {isLogin ? "Login" : "Logout"}
+                </button>
+
+            </header>
+
+            {isOpen && (
+                <Modal onClose={() => setIsOpen(false)}>
+                    <InputForm setIsOpen={() => setIsOpen(false)} />
+                </Modal>
+            )}
+        </>
+    );
 }

@@ -5,14 +5,9 @@ import Home from './pages/Home'
 import MainNavigation from './components/MainNavigation'
 import AddFoodRecipe from './pages/AddFoodRecipe'
 import EditRecipe from './pages/EditRecipe'
+import AIRecipe from './pages/AIRecipe'
+import RecipeDetails from './pages/RecipeDetails'
 import axios from 'axios'
-
-// const getAllRecipes=async()=>{
-//   let allRecipes=[]
-//   await axios.get('http://localhost:5174/recipe').then(res=>{
-//     allRecipes=res.data})
-//     return allRecipes
-// }
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -41,35 +36,6 @@ export const getMyRecipes = async () => {
   }
 }
 
-// const getMyRecipes=async()=>{
-//   let user =JSON.parse(localStorage.getItem("user"))
-//   let allRecipes=await getAllRecipes()
-//   return allRecipes.filter(item=>item.createdBy===user._id)
-// }
-
-// const getMyRecipes = async () => {
-//   let user = JSON.parse(localStorage.getItem("user"));
-  
-//   if (!user) {
-//     return []; 
-//   }
-
-//   let allRecipes = await getAllRecipes();
-  
-//   // Ensure the logged-in user ID is a string
-//   let userId = String(user._id || user.id); 
-  
-//   return allRecipes.filter(item => {
-//     if (!item.createdBy) return false;
-
-//     // Extract the ID whether it was sent as an object or a raw string
-//     let creatorId = String(item.createdBy._id || item.createdBy);
-    
-//     // Compare the two strings
-//     return creatorId === userId;
-//   });
-// }
-
 const getFavRecipe=()=>{
   return JSON.parse(localStorage.getItem("fav")) ?? [];
 }
@@ -81,6 +47,8 @@ const router = createBrowserRouter([
   {path:"/favRecipe", element:<Home/>, loader: getFavRecipe},
   {path:"/addRecipe", element:<AddFoodRecipe/>},
   {path:"/editRecipe/:id", element:<EditRecipe/>},
+  {path:"/recipe/:id", element:<RecipeDetails/>},
+  {path:"/ai-recipe", element:<AIRecipe/>},
   ]}
 ])
 

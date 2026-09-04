@@ -28,21 +28,57 @@ const getRecipe=async(req,res)=>{
 }
 
 // Add a new recipe
-const addRecipe=async(req,res)=>{
-    console.log(req.user)
-    const {title,ingredients,instructions,time}=req.body 
+const addRecipe = async (req, res) => {
+    try {
+        console.log(req.user);
 
-    if(!title || !ingredients || !instructions)
-    {
-        res.json({message:"Required fields can't be empty"})
+        let { title, ingredients, instructions, time } = req.body;
+
+        // Validate required fields
+        if (!title || !ingredients || !instructions) {
+            return res.status(400).json({
+                message: "Required fields can't be empty"
+            });
+        }
+
+        // Since normal recipe forms send ingredients through FormData,
+        // the array may arrive as a JSON string.
+        if (typeof ingredients === "string") {
+            try {
+                ingredients = JSON.parse(ingredients);
+            } catch (error) {
+                // If it's not JSON, keep it as an array with one string value
+                ingredients = [ingredients];
+            }
+        }
+
+        // Image is optional for AI-generated recipes
+        const recipeData = {
+            title,
+            ingredients,
+            instructions,
+            time,
+            createdBy: req.user.id
+        };
+
+        // Add coverImage only when a file was uploaded
+        if (req.file) {
+            recipeData.coverImage = req.file.filename;
+        }
+
+        const newRecipe = await Recipes.create(recipeData);
+
+        return res.status(201).json(newRecipe);
+
+    } catch (err) {
+        console.error("Error adding recipe:", err);
+
+        return res.status(500).json({
+            message: "Error creating recipe",
+            error: err.message
+        });
     }
-
-    const newRecipe=await Recipes.create({
-        title,ingredients,instructions,time,coverImage:req.file.filename,
-        createdBy:req.user.id // only logged in user can create a recipe
-    })
-   return res.json(newRecipe)
-}
+};
 
 // Edit a recipe
 // If new image given then add new one else keep the old one

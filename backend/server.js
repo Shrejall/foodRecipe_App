@@ -17,18 +17,10 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
-// Add ".." here too
-// app.use(express.static(path.resolve(__dirname, '..', 'frontend', 'food-blog-app', 'dist')));
 
 app.use("/",require("./routes/user"))
 app.use("/recipe",require("./routes/recipe"))
-
-// Serve frontend in production (Catch-all route)
-// if (process.env.NODE_ENV === 'production') {
-//   app.get(/(.*)/, (req, res) => {
-//     res.sendFile(path.resolve(__dirname,'..', 'frontend', 'food-blog-app', 'dist', 'index.html'));
-//   });
-// }
+app.use("/ai", require("./routes/ai"));
 
 app.listen(PORT, (err)=>{
     console.log(`app is listening on the port ${PORT}`)
