@@ -1,132 +1,296 @@
-A full-stack MERN (MongoDB, Express, React, Node.js) web application where users can create, view, edit, delete, and favorite recipes.
+# 🍳 RecipeHub – AI-Powered Recipe Sharing Platform
 
-The app supports image uploads, JWT-based authentication, and personalized recipe management.
+A full-stack **MERN** recipe-sharing application enhanced with **Google Gemini AI**. Users can discover recipes, create and manage their own recipes, upload images, save favorites, and use AI to turn available ingredients into practical recipes or find ingredient substitutes.
 
-🚀 Live Demo
+## 🚀 Live Demo
 
-🔗 Frontend: https://your-frontend-link.vercel.app
+🔗 **Frontend:** https://foodrecipe-frontend-pxgo.onrender.com
 
-🔗 Backend API: https://your-backend-link.onrender.com
+🔗 **GitHub:** https://github.com/Shrejall/foodRecipe_App
 
+## 📸 Screenshots
 
-📌 Features
+### 🏠 Home Page
 
-✅ User Authentication (JWT based login & register)
-✅ Create, Read, Update, Delete (CRUD) Recipes
-✅ Image Upload using Multer
-✅ Protected Routes
-✅ Favorite Recipes
-✅ Responsive UI
-✅ Secure API endpoints
-✅ Personalized recipe dashboard
+<img src="./screenshots/home.png" width="900">
 
-🛠️ Tech Stack
-Frontend
+### 🍽️ Explore Recipes
 
-React (Vite)
+<img src="./screenshots/recipes.png" width="900">
 
-React Router
+### 🤖 AI Recipe Generator & Ingredient Substitution
 
-Axios
+<img src="./screenshots/ai-features.png" width="700">
 
-Context API
+### 📖 Recipe Details
 
-CSS
+<img src="./screenshots/recipe-details.png" width="700">
 
-Backend
+### 📝 Recipe Instructions
 
-Node.js
+<img src="./screenshots/recipe-instructions.png" width="700">
 
-Express.js
+## ✨ Features
 
-MongoDB
+### 👤 User & Recipe Management
 
-Mongoose
+* User registration and login with **JWT authentication**
+* Create, read, update, and delete recipes
+* Personalized recipe management
+* Favorite and unfavorite recipes
+* Protected API routes
+* Responsive user interface
 
-Multer (Image Uploads)
+### 🤖 AI-Powered Features
 
-JWT Authentication
+* **Recipe Generation:** Enter multiple ingredients you have available and Gemini generates a practical recipe with a title, ingredient list, step-by-step instructions, and estimated cooking time.
+* **Ingredient Substitution:** Enter an ingredient and Gemini suggests **3–4 practical substitutes**, including replacement amounts and a short explanation of why each substitute works.
+* AI responses are requested in a structured **JSON format**, making them easy for the frontend to consume.
+* Temporary Gemini service failures are handled with retry logic and incremental delays.
 
-dotenv
+### 🖼️ Image Uploads
 
-📂 Project Structure
-Recipe_App/
-│
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── App.jsx
+* Upload recipe images using **Multer**
+* Images are stored on the backend and served through a static route
+* Image filenames are associated with recipes in MongoDB
+
+## 🧠 AI Integration Flow
+
+```text
+User enters ingredients / ingredient
+            ↓
+      React Frontend
+            ↓
+      Express AI Route
+            ↓
+      AI Controller
+            ↓
+       AI Service
+            ↓
+      Google Gemini API
+            ↓
+  Structured JSON Response
+            ↓
+      React Frontend
+```
+
+The backend exposes two AI endpoints:
+
+```http
+POST /ai/generate-recipe
+POST /ai/substitute
+```
+
+The AI layer is implemented in `backend/services/aiService.js`, while request handling is separated into the AI controller and routes. Your backend registers these endpoints under `/ai`.
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React
+* Vite
+* React Router
+* Axios
+* Context API
+* CSS
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT
+* bcrypt
+* Multer
+* dotenv
+* CORS
+
+### AI
+
+* **Google Gemini API**
+* `@google/genai` SDK
+
+## 📂 Project Structure
+
+```text
+foodRecipe_App/
 │
 ├── backend/
-│   ├── controllers/
+│   ├── config/
+│   ├── controller/
+│   │   ├── ai.js
+│   │   ├── recipe.js
+│   │   └── user.js
+│   ├── middleware/
 │   ├── models/
 │   ├── routes/
-│   ├── middleware/
-│   ├── config/
+│   │   └── ai.js
+│   ├── services/
+│   │   └── aiService.js
+│   ├── public/
+│   │   └── images/
+│   ├── package.json
 │   └── server.js
 │
+├── frontend/
+│   └── ...
+│
 └── README.md
+```
 
-⚙️ Installation & Setup
-1️⃣ Clone the Repository
-git clone https://github.com/your-username/Recipe_App.git
-cd Recipe_App
+## ⚙️ Installation & Setup
 
-2️⃣ Backend Setup
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Shrejall/foodRecipe_App.git
+cd foodRecipe_App
+```
+
+### 2. Backend setup
+
+```bash
 cd backend
 npm install
+```
 
+Create a `.env` file inside `backend`:
 
-Create a .env file inside backend:
-
+```env
 PORT=5000
 CONNECTION_STRING=mongodb://localhost:27017/Recipe_App
 JWT_SECRET=your_secret_key
+GEMINI_API_KEY=your_gemini_api_key
+```
 
+Start the backend:
 
-Run backend:
-
+```bash
 npm start
+```
 
-3️⃣ Frontend Setup
-cd frontend
-npm install
+For development:
+
+```bash
 npm run dev
+```
 
+### 3. Frontend setup
 
-Frontend runs on:
+Open a new terminal and install the frontend dependencies according to the frontend project's package configuration.
 
+Then start the frontend development server:
+
+```bash
+npm run dev
+```
+
+The development frontend is typically available at:
+
+```text
 http://localhost:5173
+```
 
+The backend is typically available at:
 
-Backend runs on:
-
+```text
 http://localhost:5000
+```
 
-🔐 Authentication Flow
+## 🔐 Authentication Flow
 
-User registers/logs in
-
-JWT token is generated
-
+```text
+User registers / logs in
+        ↓
+JWT token generated
+        ↓
 Token stored in localStorage
+        ↓
+Protected requests include token
+        ↓
+Backend middleware validates token
+        ↓
+User-specific data is returned
+```
 
-Protected routes validate token via middleware
+## 🤖 AI API Examples
 
-User-specific recipes are fetched
+### Generate a recipe from ingredients
 
-🖼️ Image Upload Flow
+```http
+POST /ai/generate-recipe
+Content-Type: application/json
+```
 
-User uploads image
+```json
+{
+  "ingredients": "potato, onion, tomato, cumin"
+}
+```
 
-Image stored in /public/images (backend)
+Example response shape:
 
-<img width="1890" height="1010" alt="image" src="https://github.com/user-attachments/assets/e3193c5f-3646-4b24-93d1-4c78a67efa23" />
-<img width="1865" height="981" alt="image" src="https://github.com/user-attachments/assets/e489da0e-74c9-4873-880b-6acd6c9b4266" />
+```json
+{
+  "title": "Spiced Potato Curry",
+  "ingredients": [
+    "2 potatoes",
+    "1 onion",
+    "2 tomatoes",
+    "1 tsp cumin"
+  ],
+  "steps": [
+    "Chop the vegetables.",
+    "Heat oil and add cumin.",
+    "Cook the onion and tomatoes.",
+    "Add potatoes and cook until tender."
+  ],
+  "time": "30 minutes"
+}
+```
 
+### Find ingredient substitutes
 
+```http
+POST /ai/substitute
+Content-Type: application/json
+```
 
-Filename saved in MongoDB
+```json
+{
+  "ingredient": "butter"
+}
+```
 
-Frontend renders image via static route
+The response contains the original ingredient and a list of suggested substitutes with replacement amounts and reasons.
+
+## 🖼️ Image Upload Flow
+
+```text
+User selects recipe image
+        ↓
+Multer processes upload
+        ↓
+Image stored in backend/public/images
+        ↓
+Filename saved with recipe data
+        ↓
+Frontend loads image through /images/<filename>
+```
+
+## 📌 Why This Project?
+
+RecipeHub combines a traditional **full-stack CRUD application** with practical **Generative AI features**. It demonstrates authentication, REST API development, database integration, file uploads, and AI-powered structured responses in one application.
+
+## 🔮 Future Improvements
+
+* AI-powered personalized recipe recommendations
+* Nutrition and calorie estimation
+* Dietary preference support
+* Recipe difficulty and preparation-time filters
+* Streaming AI responses for a more interactive experience
+
+---
+
+Made with ❤️ using **MERN + Gemini AI**
