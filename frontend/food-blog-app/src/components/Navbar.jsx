@@ -101,7 +101,10 @@ export default function Navbar() {
 
             {isOpen && (
                 <Modal onClose={() => setIsOpen(false)}>
-                    <InputForm setIsOpen={() => setIsOpen(false)} />
+                    <InputForm
+                        setIsOpen={() => setIsOpen(false)}
+                        onLogin={() => setIsLogin(false)}
+                    />
                 </Modal>
             )}
         </>

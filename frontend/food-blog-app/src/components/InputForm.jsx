@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 
-export default function InputForm({setIsOpen}) {
+export default function InputForm({ setIsOpen, onLogin }) {
     const [email,setEmail] = useState("")
     const [password,setPassword]=useState("")
     const [isSignUp, setIsSignUp] =useState(false)
@@ -17,6 +17,11 @@ export default function InputForm({setIsOpen}) {
         .then((res)=>{
             localStorage.setItem("token", res.data.token)
             localStorage.setItem("user", JSON.stringify(res.data.user))
+
+            if (onLogin) {
+                onLogin()
+            }
+
             setIsOpen(false)
         })
         .catch(data=>setError(data.response?.data?.error))
