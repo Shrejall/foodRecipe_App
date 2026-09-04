@@ -32,8 +32,13 @@ export default function RecipeItems() {
 
     // Load recipes
     useEffect(() => {
-        setAllRecipes(recipes);
-    }, [recipes]);
+        if (location.pathname === "/favRecipe") {
+            const favorites = JSON.parse(localStorage.getItem("fav")) ?? [];
+            setAllRecipes(favorites);
+        } else {
+            setAllRecipes(recipes);
+        }
+    }, [recipes, location.pathname]);
 
 
     // Delete recipe
