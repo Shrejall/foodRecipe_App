@@ -11,25 +11,25 @@ A full-stack **MERN** recipe-sharing application enhanced with **Google Gemini A
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-<img width="1907" height="998" alt="home" src="https://github.com/user-attachments/assets/563a7b5b-ab75-4080-9d6b-379ae0e84559" />
+<img width="800" height="800" alt="home" src="https://github.com/user-attachments/assets/563a7b5b-ab75-4080-9d6b-379ae0e84559" />
 
 ### 🍽️ Explore Recipes
-<img width="1912" height="1006" alt="recipes" src="https://github.com/user-attachments/assets/63b1b14f-45a1-4f0d-aafc-468757cb35d0" />
+<img width="800" height="800" alt="recipes" src="https://github.com/user-attachments/assets/63b1b14f-45a1-4f0d-aafc-468757cb35d0" />
 
 
 ### 🤖 AI Recipe Generator & Ingredient Substitution
 
-<img width="830" height="993" alt="ai-features" src="https://github.com/user-attachments/assets/cbf187fd-b2af-4cf4-98e8-0d160ab9f59c" />
+<img width="800" height="800" alt="ai-features" src="https://github.com/user-attachments/assets/cbf187fd-b2af-4cf4-98e8-0d160ab9f59c" />
 
 
 ### 📖 Recipe Details
 
-<img width="871" height="912" alt="recipe-details" src="https://github.com/user-attachments/assets/4ba39a45-da0e-4e67-a415-110f0345a5ca" />
+<img width="800" height="800" alt="recipe-details" src="https://github.com/user-attachments/assets/4ba39a45-da0e-4e67-a415-110f0345a5ca" />
 
 
 ### 📝 Recipe Instructions
 
-<img width="857" height="682" alt="recipe-instructions" src="https://github.com/user-attachments/assets/cd0eea3b-513f-47c4-8288-6fffab4d2d85" />
+<img width="800" height="800" alt="recipe-instructions" src="https://github.com/user-attachments/assets/cd0eea3b-513f-47c4-8288-6fffab4d2d85" />
 
 
 ## ✨ Features
